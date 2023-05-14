@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="tictactoe.css" />
+</head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+Bhaina+2&family=Roboto&display=swap');
+
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background-color: #fafcfa;
+  }
+
+  nav {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    height: 65px;
+    font-size: 27px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  nav ul {
+    list-style-type: none;
+  }
+
+  .gameContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+  }
+
+  .container {
+    display: grid;
+    grid-template-rows: repeat(3, 10vw);
+    grid-template-columns: repeat(3, 10vw);
+    font-family: 'Roboto', sans-serif;
+    position: relative;
+  }
+
+  .box {
+    border: 2px solid black;
+    font-size: 8vw;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .box:hover {
+    background-color: rgb(158, 144, 144);
+    color: white;
+  }
+
+  .info {
+    font-size: 22px;
+  }
+
+  .gameInfo {
+    align-items: center;
+    padding: 0 34px;
+    font-family: 'Baloo Bhaina 2', cursive;
+  }
+
+  .gameInfo h1 {
+    font-size: 2.5rem;
+    text-decoration: underline 4px;
+  }
+
+  .imgbox img {
+    width: 0;
+    transition: width 1s ease-in-out;
+  }
+
+  .info {
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .br-0 {
+    border-right: 0;
+  }
+
+  .bl-0 {
+    border-left: 0;
+  }
+
+  .bt-0 {
+    border-top: 0;
+  }
+
+  .bb-0 {
+    border-bottom: 0;
+  }
+
+  #reset {
+    margin: 0 23px;
+    padding: 1px 18px;
+    background: #f3e7f9;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Baloo Bhaina 2';
+    font-size: 15px;
+    font-weight: bolder;
+  }
+
+  .line {
+    background-color: black;
+    height: 3px;
+    width: 0;
+    position: absolute;
+    background-color: #911d91;
+    transition: width 1s ease-in-out;
+  }
+
+  @media screen and (max-width: 950px) {
+    .gameContainer {
+      flex-wrap: wrap;
+    }
+
+    .gameInfo {
+      margin-top: 34px;
+    }
+
+    .gameInfo h1 {
+      font-size: 1.5rem;
+    }
+
+    .container {
+      grid-template-rows: repeat(3, 20vw);
+      grid-template-columns: repeat(3, 20vw);
+    }
+  }
+
+  .footer {
+    margin-top: 60px;
+    padding: 1rem 9%;
+    color: white;
+    background-color: black;
+
+
+  }
+
+  .footer-text p {
+    font-size: 1rem;
+  }
+</style>
+
+<body>
+  <nav>
+    <ul>
+      <li>Tic-Tac-Toe</li>
+    </ul>
+  </nav>
+
+  <div class="gameContainer">
+    <div class="container">
+      <div class="line"></div>
+      <div class="box bt-0 bl-0"><span class="boxtext"></span></div>
+      <div class="box bt-0"><span class="boxtext"></span></div>
+      <div class="box bt-0 br-0"><span class="boxtext"></span></div>
+      <div class="box bl-0"><span class="boxtext"></span></div>
+      <div class="box"><span class="boxtext"></span></div>
+      <div class="box br-0"><span class="boxtext"></span></div>
+      <div class="box bl-0 bb-0"><span class="boxtext"></span></div>
+      <div class="box bb-0"><span class="boxtext"></span></div>
+      <div class="box bb-0 br-0"><span class="boxtext"></span></div>
+    </div>
+    <div class="gameInfo">
+      <h1>Welcome to My Tic-Tac-Toe</h1>
+      <div>
+        <div class="info">Turn for X</div>
+        <center><button id="reset" onclick="reset()">Reset</button></center>
+
+      </div>
+      <div class="imgbox">
+        <center>
+          <img src="https://media.tenor.com/rE2qbwF2DnwAAAAM/i-win-you-lose.gif" alt="" />
+        </center>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer-text">
+      <p>Copyright &copy; 2023 by Shahareyar | All rights reserved.</p>
+    </div>
+
+
+  </footer>
+  <script>
+    console.log("Welcome to Tic Tac Toe")
+    let music = new Audio("bg.mp3")
+    let audioTurn = new Audio("click.mp3")
+    let gameover = new Audio("go.mp3")
+    let turn = "X"
+    let isgameover = false;
+
+    const changeTurn = () => {
+      return turn === "X" ? "0" : "X"
+    }
+
+    function checkDraw() {
+      let boxtexts = document.querySelectorAll('.boxtext');
+      for (let i = 0; i < boxtexts.length; i++) {
+        if (boxtexts[i].innerText === '') {
+          return false;
+        }
+      }
+      return true;
+    }
+    const checkWin = () => {
+      let boxtext = document.getElementsByClassName('boxtext');
+      let wins = [
+        [0, 1, 2, 5, 5, 0],
+        [3, 4, 5, 5, 15, 0],
+        [6, 7, 8, 5, 25, 0],
+        [0, 3, 6, -5, 15, 90],
+        [1, 4, 7, 5, 15, 90],
+        [2, 5, 8, 15, 15, 90],
+        [0, 4, 8, 5, 15, 45],
+        [2, 4, 6, 5, 15, 135],
+      ];
+
+      wins.forEach(e => {
+        if (
+          boxtext[e[0]].innerText === boxtext[e[1]].innerText && boxtext[e[0]].innerText === boxtext[e[2]].innerText && boxtext[e[0]].innerText !== '') {
+          document.querySelector('.info').innerText = boxtext[e[0]].innerText + " Won\n click on reset";
+          isgameover = true;
+          document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "200px";
+          document.querySelector(".container").style.backgroundColor = "red";
+          document.querySelector(".container").style.border = "2px solid black";
+          
+        }
+      });
+    }
+
+    function clear() {
+      let boxtexts = document.querySelectorAll('.boxtext');
+      Array.from(boxtexts).forEach(element => {
+        element.innerText = ""
+      });
+      turn = changeTurn();
+      document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "0px";
+      document.getElementsByClassName("info")[0].innerText = "Turn for " + turn;
+      document.querySelector(".container").style.border = "0px solid red";
+    }
+
+    let boxes = document.getElementsByClassName("box");
+    Array.from(boxes).forEach(element => {
+      let boxtext = element.querySelector('.boxtext');
+      element.addEventListener('click', () => {
+        if (boxtext.innerText === '') {
+          boxtext.innerText = turn;
+          turn = changeTurn();
+          audioTurn.play();
+          checkWin();
+          if (!isgameover) {
+            if (checkDraw()) {
+              document.querySelector('.info').innerText = "It's a draw!\n Click on reset";
+              isgameover = true;
+            } 
+            else {
+              document.getElementsByClassName("info")[0].innerText = "Turn for " + turn;
+            }
+          }
+        }
+      });
+    });
+
+    reset.addEventListener('click', () => {
+      let boxtexts = document.querySelectorAll('.boxtext');
+      Array.from(boxtexts).forEach(element => {
+        element.innerText = ""
+      });
+      turn = "X";
+      isgameover = false
+      document.querySelector(".line").style.width = "0vw";
+      document.getElementsByClassName("info")[0].innerText = "Turn for " + turn;
+      document.querySelector('.imgbox').getElementsByTagName('img')[0].style.width = "0px"
+      document.querySelector(".container").style.border = "0px solid red";
+      document.querySelector(".container").style.removeProperty("background-color");
+    })
+
+
+  </script>
+</body>
+
+</html>
